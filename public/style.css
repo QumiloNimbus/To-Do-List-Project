@@ -65,6 +65,11 @@ body{
 .task-adder button:active{
     background-color: blueviolet;
 }
+#empty-error{
+    text-align: center;
+    color:rgb(255, 0, 106);
+    display: none;
+}
 .task-list-title{
     text-align: center;
     text-decoration: underline;
@@ -106,10 +111,11 @@ body{
     color: rgb(255, 0, 106);
 }
 .delete-btn:hover{
-    color:rgb(154, 0, 64)
+    color:rgb(154, 0, 64);
 }
 .edit-btn{
-    color:rgb(189, 0, 199)
+    color:rgb(235, 0, 168);
+    background-color:white;
 }
 .edit-btn:hover{
     color:rgb(120, 0, 126)

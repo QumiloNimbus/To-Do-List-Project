@@ -7,11 +7,48 @@ add_btn.addEventListener("click",()=>{
     input_task.value="";
 })
 
+//closing the edit window
+let edit_done_button=document.querySelector(".edit-done-button")
+let edit_background=document.querySelector(".edit-background")
+edit_done_button.addEventListener("click",(event)=>{
+    event.preventDefault()
+    closeEdit()
+})
+
+function closeEdit(){
+    edit_background.style.display="none";
+}
+
+//--------------
+//edit window appear when clicked on edit button
+let edit_buttons=document.querySelectorAll(".edit-btn")
+let delete_buttons=document.querySelectorAll(".delete-btn")
+
+document.addEventListener("click",event=>{
+    if(event.target.parentNode.matches(".edit-btn") || event.target.matches(".edit-btn")){
+        edit_background.style.display="flex"
+    }
+    if(event.target.parentNode.matches(".delete-btn") || event.target.matches(".delete-btn")){
+        //what happens when you press the delete button
+    }
+})
+
+console.log(edit_buttons)
+//--------------
 function addTask(){
-    let task_list=document.querySelector(".task-list")
-    console.log("clicked")
-    let task=document.createElement("div")
+    //checking if input is empty or not
+    let empty_error=document.getElementById("empty-error")
+    if(input_task.value===""){
+        
+        empty_error.style.display="block";
+        return;
+    }
+
+    empty_error.style.display="none";
     let task_title=document.createElement("div");
+    
+    let task_list=document.querySelector(".task-list")
+    let task=document.createElement("div")
     let task_btns=document.createElement("div");
 
     task.className="task";
