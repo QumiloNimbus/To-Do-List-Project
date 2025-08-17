@@ -20,7 +20,7 @@
                     </div>
                     <div>
                         <label for="edit-task-id">TaskId</label>
-                        <a id="edit-task-id">sahghs8eirugheirhieh</a>
+                        <a id="edit-task-id"></a>
                     </div>
                     <div>
                         <label for="task-completed-checkbox">Completed</label>
@@ -38,11 +38,17 @@
                 <button id="task-add-btn">Add</button>
             </div>
             <h2 id="empty-error">Got no work?</h2>
+            <h2 class="task-list-title">Task List</h2>  
+            <div class="loading-tasks-div">
+                    <h2 id="loading-tasks-heading">Loading tasks...</h2>
+            </div>
             <div class="task-list">
-                <h2 class="task-list-title">Task List</h2>
-                <div class="task">
+                
+                
+                <!-- task template here -->
+                <!-- <div class="task">
                     <div class="task-title">
-                        <h4>I gotta do something about it.</h4>
+                        <h4 class="title-heading">I gotta do something about it.</h4>
                     </div>
                     
                     <div class="task-btns">
@@ -50,12 +56,16 @@
                         <button class="delete-btn"><i class="fa-solid fa-trash"></i></button>
                     </div>
                     
-                </div>
+                </div> -->
 
 
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer">
+    </script>
     <script src="https://kit.fontawesome.com/801af82d0c.js" crossorigin="anonymous"></script>
     <script src="./script.js"></script>
 </body>

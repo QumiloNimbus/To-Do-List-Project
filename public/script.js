@@ -1,41 +1,80 @@
-// const { createElement } = require("react")
+
+
+const edit_task_title=document.getElementById('edit-task-title')
+const edit_task_id=document.getElementById('edit-task-id')
+const edit_task_completed=document.getElementById('task-completed-checkbox')
+const loading_tasks_heading=document.getElementById('loading-tasks-heading')
+
 
 let input_task=document.getElementById("input-task")
 const add_btn=document.getElementById("task-add-btn")
+
+
+//To add tasks to the list
 add_btn.addEventListener("click",()=>{
     addTask()
     input_task.value="";
 })
 
-//closing the edit window
+//updating the specific task details and closing the edit pop up
 let edit_done_button=document.querySelector(".edit-done-button")
 let edit_background=document.querySelector(".edit-background")
-edit_done_button.addEventListener("click",(event)=>{
+
+edit_done_button.addEventListener("click",async (event)=>{
     event.preventDefault()
-    closeEdit()
+    //getting values
+    const name=edit_task_title.value
+    const taskID=edit_task_id.innerText
+    const completed=edit_task_completed.checked
+    //updating
+    await axios.put(`/api/v1/tasks/${taskID}`,{name,completed})
+    //closing popup
+    edit_background.style.display="none";
+
+    showTasks()
+
 })
 
-function closeEdit(){
-    edit_background.style.display="none";
-}
 
-//--------------
+
 //edit window appear when clicked on edit button
 let edit_buttons=document.querySelectorAll(".edit-btn")
 let delete_buttons=document.querySelectorAll(".delete-btn")
 
-document.addEventListener("click",event=>{
-    if(event.target.parentNode.matches(".edit-btn") || event.target.matches(".edit-btn")){
-        edit_background.style.display="flex"
+document.addEventListener("click",async (event)=>{
+    //what happens when clicked on edit button
+    if(event.target.closest('button.edit-btn')){
+        
+        edit_background.style.display="flex";
+        const edit_btn=event.target.closest('button.edit-btn')
+        //getting the task id from the dataset of the button
+        const taskID=edit_btn.dataset.id
+        //gets data of specific task and 
+        const {data:{task:{name,completed}}} = await axios.get(`/api/v1/tasks/${taskID}`)
+        
+
+        //puts the respective values on the edit popup
+        edit_task_title.value=name;
+        edit_task_id.innerText=taskID;
+        edit_task_completed.checked=completed;
+
     }
-    if(event.target.parentNode.matches(".delete-btn") || event.target.matches(".delete-btn")){
-        //what happens when you press the delete button
+    //what happens when clicked on delete button
+    if(event.target.closest('button.delete-btn')){
+        const delete_btn=event.target.closest('button.delete-btn');
+        //gets the id of the respective task
+        const taskID=delete_btn.dataset.id;
+        //and deletes it from the database
+        await axios.delete(`/api/v1/tasks/${taskID}`);
+        await showTasks();
     }
 })
 
-console.log(edit_buttons)
-//--------------
-function addTask(){
+
+
+
+//function to add a task
+async function addTask(){
     //checking if input is empty or not
     let empty_error=document.getElementById("empty-error")
     if(input_task.value===""){
@@ -43,45 +82,44 @@ function addTask(){
         empty_error.style.display="block";
         return;
     }
-
     empty_error.style.display="none";
-    let task_title=document.createElement("div");
-    
-    let task_list=document.querySelector(".task-list")
-    let task=document.createElement("div")
-    let task_btns=document.createElement("div");
 
-    task.className="task";
-    task_title.className="task-title"
-    task_btns.className="task-btns"
-    
-
-    let title=document.createElement("h4")
-    let edit_btn=document.createElement("button");
-    let delete_btn=document.createElement("button");
-
-    title.innerText=input_task.value;
-
-    edit_btn.className="edit-btn";
-    delete_btn.className="delete-btn";
-
-    let edit_icon=document.createElement("i")
-    let delete_icon=document.createElement("i")
-
-    edit_icon.className="fa-solid fa-pen-to-square";
-    delete_icon.className="fa-solid fa-trash";
-
-    edit_btn.appendChild(edit_icon)
-    delete_btn.appendChild(delete_icon)
-
-    task_btns.append(edit_btn,delete_btn)
-    task_title.appendChild(title)
-    // task_title.appendChild(task_title)
-
-    task.append(task_title,task_btns)
-
-    task_list.appendChild(task)
+    const input_task_element=document.getElementById('input-task')
+    //gets value from the input
+    const name=input_task_element.value;
+    //posts it to the database
+    await axios.post('/api/v1/tasks',{name,completed:false})
+    await showTasks();
 }
-//enter task
-//when click add button get input value
-//take value and add it to the list of tasks
+
+//function to display all the tasks
+async function showTasks(){
+    loading_tasks_heading.style.display="block"
+    //get the tasks from the database
+    const {data:{tasks}}=await axios.get("/api/v1/tasks")
+    
+    const  allTasks= tasks.map(task=>{
+        const {_id,name,completed}=task;
+        //creates html for every single task
+        const taskDOM=`<div class="task">
+                    <div class="task-title">
+                        <h4 class="title-heading ${completed?'task-completed':''}">${name}</h4>
+                    </div>
+                    
+                    <div class="task-btns">
+                        <button class="edit-btn" data-id="${_id}"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button class="delete-btn" data-id="${_id}"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                    
+                </div>`
+                return taskDOM
+        
+    })
+    .join('')//joins html of every single task in the list
+    let task_list=document.querySelector(".task-list")
+    loading_tasks_heading.style.display="none";
+    //and adds the html to the task list
+    task_list.innerHTML=allTasks
+}
+
+showTasks();
