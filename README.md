@@ -11,7 +11,7 @@ A simple full-stack to-do list application, built with Node.js, Express, MongoDB
 - **Backend**: NodeJS, ExpressJS
 - **Database**: MongoDB Atlas
 - **Tools**: Axios, Nodemon, Dotenv, Mongoose
----
+
  ## ⚡ Getting Started
 
 ### Prerequisites
@@ -26,12 +26,16 @@ cd todo-app
 npm install
 npm start
 ```
-###Connecting to the database
-You need to be running a mongoDB server locally or use atlas. Set that up.
+## Connecting to the database
+You need to be running a mongoDB server locally or use atlas.
 `nano .env` in the directory. 
 Get the connection string if you are running Atlas or if you are running locally and write `MONGO_URI="Connection_String"` inside the .env file (replace Connection_String with your connection string).
 
-Now open [http://localhost:3000] in your browser. (You can change the port inside app.js).
+Now open http://localhost:3000 in your browser. (You can change the port inside app.js).
+
+
+## 🔮 Future plans
+Planning on adding more features as I grow my knowledge on web development. 
 
 ## 📄 License
 Distributed under the MIT License. See `LICENSE` for more information.
